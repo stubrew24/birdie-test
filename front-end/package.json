@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.19.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts-redux-ts": "1.2.1",
     "redux-saga": "^1.0.2",
+    "semantic-ui-react": "^0.88.2",
     "styled-components": "^4.2.0"
   },
   "scripts": {
