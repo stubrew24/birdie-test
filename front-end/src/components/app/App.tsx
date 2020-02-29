@@ -1,22 +1,24 @@
 import * as React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import { RootState } from '@App/store/reducers';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import Login from '../Login';
+import Profile from '../Profile';
+// import { RootState } from '@App/store/reducers';
+// import { connect } from 'react-redux';
+// import { Dispatch } from 'redux';
 
-import Title from '@App/components/Title';
-import Logo from '@App/components/Logo';
-import SubTitle from '@App/components/SubTitle';
+// import Title from '@App/components/Title';
+// import Logo from '@App/components/Logo';
+// import SubTitle from '@App/components/SubTitle';
 
-const LogoUrl = require('../../assets/images/logo-birdie.svg');
+// const LogoUrl = require('../../assets/images/logo-birdie.svg');
 
-interface AppProps {
+// interface AppProps {
 
-}
+// }
 
-interface AppState {
+// interface AppState {
 
-}
+// }
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -37,27 +39,31 @@ const AppContainer = styled.div`
   flex-direction: column;
 `;
 
-class App extends React.Component<AppProps, AppState> {
-  public constructor(props: AppProps) {
-    super(props);
-  }
+const App: React.FC = () => {
+  
+  const [recipient, setRecipient] = React.useState('');
 
-  public render() {
-    return (
+  return (
       <>
         <GlobalStyle />
         <AppContainer>
-          <Logo src={LogoUrl} />
-          <Title>Welcome to the birdie test</Title>
-          <SubTitle>Best of luck!</SubTitle>
+          {
+            recipient 
+            ?
+              <Profile recipientId={recipient} />
+            :
+              <Login handleLogin={setRecipient}/>
+          }
         </AppContainer>
       </>
     );
-  }
-}
 
-const mapStateToProps = (state: RootState, ownProps: object) => {};
+};
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {};
+// const mapStateToProps = (state: RootState, ownProps: object) => {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+// const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {};
+
+// export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+export default App;
