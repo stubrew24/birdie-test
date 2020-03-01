@@ -8,9 +8,13 @@ eventsController.get("/events", async (_, res) => {
     `SELECT DISTINCT event_type FROM events`,
     (err, results) => {
       if (err) {
-        res.status(500).json({error: err});
+        return res.status(500).json({error: err});
+      } else if (!results.length) {
+        return res.status(404).json({error: 'No results.'})
       }
-      res.status(200).json(results.map((x: {event_type: string}) => x.event_type));
+
+      const events = results.map((x: {event_type: string}) => x.event_type)
+      return res.status(200).json({events});
     }
   );
 });
@@ -20,10 +24,13 @@ eventsController.get("/recipients", async (_, res) => {
     "SELECT DISTINCT care_recipient_id FROM events ",
     (err, results) => {
       if (err) {
-        res.status(500).json({error: err});
+        return res.status(500).json({error: err});
+      } else if (!results.length) {
+        return res.status(404).json({error: 'No results.'})
       }
+
       const recipients = results.map((x: {care_recipient_id: string}) => x.care_recipient_id)
-      res.status(200).json({recipients});
+      return res.status(200).json({recipients});
     }
   );
 });
@@ -35,11 +42,10 @@ eventsController.get("/recipients/:id", async (req, res) => {
     `SELECT payload FROM events WHERE care_recipient_id = '${id}'`,
     (err, results) => {
       if (err) {
-        res.status(500).json({error: err});
+        return res.status(500).json({error: err});
+      } else if (!results.length) {
+        return res.status(404).json({error: 'No results.'})
       }
-      if (!results.length){
-        return res.status(404).json({error: 'User not found.'})
-      } 
 
       const events = results.map((x: {payload: string}) => JSON.parse(x.payload))
       return res.status(200).json({events});
@@ -55,8 +61,11 @@ eventsController.get("/recipients/:id/:date", async (req, res) => {
     `SELECT payload FROM events WHERE care_recipient_id = '${id}' AND timestamp LIKE '${shortDate}%'`,
     (err, results) => {
       if (err) {
-        res.status(500).json({error: err});
+        return res.status(500).json({error: err});
+      } else if (!results.length) {
+        return res.status(404).json({error: 'No results.'})
       }
+
       const events = results.map((x: {payload: string}) => JSON.parse(x.payload))
       return res.status(200).json({events});
     }
