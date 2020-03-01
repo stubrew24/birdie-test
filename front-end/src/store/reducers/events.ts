@@ -10,7 +10,7 @@ const initialState: EventsState = {
   events: []
 };
 
-export default function reducer(
+export default function eventsReducer(
   state: EventsState = initialState,
   action: ActionTypes
 ): EventsState {

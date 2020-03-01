@@ -2,32 +2,23 @@ import * as React from 'react';
 import Login from '../Login';
 import Profile from '../Profile';
 import { Container } from 'semantic-ui-react';
-// import { RootState } from '@App/store/reducers';
-// import { connect } from 'react-redux';
-// import { Dispatch } from 'redux';
+import { useSelector } from 'react-redux';
+import { EventsState } from '@App/store/reducers/events';
 
 const App: React.FC = () => {
-  
-  const [recipient, setRecipient] = React.useState('');
+  const {recipient} = useSelector((state: EventsState) => state);
 
   return (
       <Container>
         {
-          recipient 
+          recipient
           ?
-          <Profile recipientId={recipient} />
+            <Profile />
           :
-          <Login handleLogin={setRecipient}/>
+            <Login />
         }
       </Container>
     );
-
 };
-
-// const mapStateToProps = (state: RootState, ownProps: object) => {};
-
-// const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {};
-
-// export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 export default App;

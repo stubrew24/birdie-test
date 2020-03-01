@@ -3,46 +3,43 @@ import { Progress, Segment, Header } from 'semantic-ui-react';
 import { recipientsUrl } from '../API';
 import { calculateMood, selectMoodColor } from '../utils/helpers';
 import ResultsTable from './ResultsTable';
+import { useSelector, useDispatch } from 'react-redux';
+import { EventsState } from '@App/store/reducers/events';
+import { Event } from '@App/store/actions';
 
 interface ResultsProps {
-  recipientId: string;
   date: string;
   event: string;
 }
 
-interface Event {
-    id: string;
-    event_type: string;
-    visit_id: string;
-    timestamp: string;
-    caregiver_id: string;
-    mood?: string;
-}
+const Results: React.FC<ResultsProps> = ({ date, event }) => {
 
-const Results: React.FC<ResultsProps> = ({recipientId, date, event}) => {
-  const [data, setData] = React.useState<Event[]>([]);
+  const { recipient, events } = useSelector((state: EventsState) => state);
+  const dispatch = useDispatch();
+  const setEvents = React.useCallback(
+    (payload: Event[]) => dispatch({type: 'SET_EVENTS', payload}),
+    [dispatch] 
+  );
 
   React.useEffect(
     () => {
-      fetch(recipientsUrl + `${recipientId}/${date}`)
+      fetch(recipientsUrl + `${recipient}/${date}`)
         .then(res => res.json())
-        .then(res => setData(res.events))
-        // tslint:disable-next-line
-        .catch(error => console.log(error));
+        .then(res => setEvents(res.events));
     },
     [date]
   );
 
-  const filteredData = () => {
+  const filteredEvents = () => {
     if (!event) {
-      return data;
+      return events;
     }
-    return data.filter(x => x.event_type === event);
+    return events.filter(x => x.event_type === event);
   };
 
-  const moodScore = calculateMood(data);
+  const moodScore = calculateMood(events);
 
-  if (!data.length) {
+  if (!events.length) {
     return (
       <Segment>
         No data available for this date.
@@ -56,7 +53,7 @@ const Results: React.FC<ResultsProps> = ({recipientId, date, event}) => {
         <Header>Current Mood</Header>
         <Progress percent={moodScore} color={selectMoodColor(moodScore)} />
       </Segment>
-      <ResultsTable data={filteredData()} />
+      <ResultsTable data={filteredEvents()} />
     </>
   );
 };
