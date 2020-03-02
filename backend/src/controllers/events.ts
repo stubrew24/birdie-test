@@ -10,7 +10,7 @@ eventsController.get("/events", async (_, res) => {
       if (err) {
         return res.status(500).json({error: err});
       } else if (!results.length) {
-        return res.status(404).json({error: 'No results.'})
+        return res.status(200).json({events: []})
       }
 
       const events = results.map((x: {event_type: string}) => x.event_type)
@@ -26,7 +26,7 @@ eventsController.get("/recipients", async (_, res) => {
       if (err) {
         return res.status(500).json({error: err});
       } else if (!results.length) {
-        return res.status(404).json({error: 'No results.'})
+        return res.status(200).json({recipients: []})
       }
 
       const recipients = results.map((x: {care_recipient_id: string}) => x.care_recipient_id)
@@ -44,7 +44,7 @@ eventsController.get("/recipients/:id", async (req, res) => {
       if (err) {
         return res.status(500).json({error: err});
       } else if (!results.length) {
-        return res.status(404).json({error: 'No results.'})
+        return res.status(200).json({events: []})
       }
 
       const events = results.map((x: {payload: string}) => JSON.parse(x.payload))
@@ -63,7 +63,7 @@ eventsController.get("/recipients/:id/:date", async (req, res) => {
       if (err) {
         return res.status(500).json({error: err});
       } else if (!results.length) {
-        return res.status(404).json({error: 'No results.'})
+        return res.status(200).json({events: []})
       }
 
       const events = results.map((x: {payload: string}) => JSON.parse(x.payload))
