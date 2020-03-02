@@ -1,7 +1,7 @@
-import { createStore } from 'redux';
+// import { createStore } from 'redux';
 // import createSagaMiddleware from 'redux-saga';
 // import createBrowserHistory from 'history/createBrowserHistory';
-import reducer from '@App/store/reducers';
+// import reducer from '@App/store/reducers';
 // import initSaga from '@App/store/sagas';
 
 // declare global {
@@ -16,8 +16,33 @@ import reducer from '@App/store/reducers';
 
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-  // composeEnhancers(applyMiddleware(sagaMiddleware)),
+//   composeEnhancers(applyMiddleware(sagaMiddleware)),
 
 // sagaMiddleware.run(initSaga);
 
-export default createStore(reducer);
+// export default createStore(reducer);
+
+import { applyMiddleware, compose, createStore, StoreEnhancer } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import reducer from '@App/store/reducers';
+import initSaga from '@App/store/sagas';
+
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION__: () => undefined;
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: (arg: StoreEnhancer) => undefined;
+  }
+}
+
+const sagaMiddleware = createSagaMiddleware();
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(
+  reducer,
+  composeEnhancers(applyMiddleware(sagaMiddleware)),
+);
+
+sagaMiddleware.run(initSaga);
+
+export default store;

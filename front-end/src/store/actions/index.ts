@@ -1,6 +1,9 @@
+export const FETCH_EVENT_TYPES = 'FETCH_EVENT_TYPES';
+export const SET_EVENT_TYPES = 'SET_EVENT_TYPES';
 export const FETCH_EVENTS = 'FETCH_EVENTS';
-export const SET_RECIPIENT = 'SET_RECIPIENT';
 export const SET_EVENTS = 'SET_EVENTS';
+export const SET_RECIPIENT = 'SET_RECIPIENT';
+export const SET_DATE = 'SET_DATE';
 
 export interface Event {
   id: string;
@@ -16,21 +19,31 @@ interface SetRecipientAction {
   payload: string;
 }
 
-interface SetEventsAction {
+export interface SetDateAction {
+  type: typeof SET_DATE;
+  payload: string;
+}
+
+export interface SetEventsAction {
   type: typeof SET_EVENTS;
   payload: Event[];
 }
 
-export type ActionTypes = SetRecipientAction | SetEventsAction;
+interface SetEventTypesAction {
+  type: typeof SET_EVENT_TYPES;
+  payload: string[];
+}
 
-export const fetchEvents = () => {
-  return { type: FETCH_EVENTS };
-};
+export type ActionTypes = SetRecipientAction | SetEventsAction | SetEventTypesAction | SetDateAction;
 
-export const setRecipient = (id: string) => {
-  return { type: SET_RECIPIENT, payload: id};
-};
+export const fetchEvents = () => ({ type: FETCH_EVENTS });
 
-export const setEvents = (events: Event[]) => {
-  return { type: SET_EVENTS, payload: events};
-};
+export const setRecipient = (payload: string) => ({ type: SET_RECIPIENT, payload });
+
+export const setDate = (payload: string): SetDateAction => ({ type: SET_DATE, payload });
+
+export const fetchEventTypes = () => ({ type: FETCH_EVENT_TYPES });
+  
+export const setEvents = (payload: Event[]): SetEventsAction => ({ type: SET_EVENTS, payload });
+
+export const setEventTypes = (payload: string[]): SetEventTypesAction => ({ type: SET_EVENT_TYPES, payload});

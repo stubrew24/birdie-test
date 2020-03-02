@@ -1,34 +1,23 @@
 import * as React from 'react';
 import { Progress, Segment, Header } from 'semantic-ui-react';
-import { recipientsUrl } from '../API';
 import { calculateMood, selectMoodColor } from '../utils/helpers';
 import ResultsTable from './ResultsTable';
 import { useSelector, useDispatch } from 'react-redux';
-import { EventsState } from '@App/store/reducers/events';
-import { Event } from '@App/store/actions';
+import { EventsState } from '@App/store/reducers';
+import { fetchEvents } from '@App/store/actions';
 
 interface ResultsProps {
-  date: string;
   event: string;
 }
 
-const Results: React.FC<ResultsProps> = ({ date, event }) => {
+const Results: React.FC<ResultsProps> = ({ event }) => {
 
-  const { recipient, events } = useSelector((state: EventsState) => state);
+  const { events } = useSelector((state: EventsState) => state);
   const dispatch = useDispatch();
-  const setEvents = React.useCallback(
-    (payload: Event[]) => dispatch({type: 'SET_EVENTS', payload}),
-    [dispatch] 
-  );
 
-  React.useEffect(
-    () => {
-      fetch(recipientsUrl + `${recipient}/${date}`)
-        .then(res => res.json())
-        .then(res => setEvents(res.events));
-    },
-    [date]
-  );
+  React.useEffect(() => {
+    dispatch(fetchEvents());
+  },              []);
 
   const filteredEvents = () => {
     if (!event) {

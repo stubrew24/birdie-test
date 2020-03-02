@@ -1,17 +1,20 @@
 import * as React from 'react';
 import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react';
 import Logo from '@App/components/Logo';
-const LogoUrl = require('../assets/images/logo-birdie.svg');
 import { useDispatch } from 'react-redux';
+import { fetchEventTypes, setRecipient } from '@App/store/actions';
+
+const LogoUrl = require('../assets/images/logo-birdie.svg');
 
 const Login: React.FC = () => {
 
   const [id, setId] = React.useState('df50cac5-293c-490d-a06c-ee26796f850d');
   const dispatch = useDispatch();
-  const setRecipient = React.useCallback(
-    (recipient: string) => dispatch({type: 'SET_RECIPIENT', payload: recipient}),
-    [dispatch]
-  );
+  
+  const handleSubmit = () => {
+    dispatch(setRecipient(id));
+    dispatch(fetchEventTypes());
+  };
 
   return (
     <Grid textAlign="center" verticalAlign="middle">
@@ -20,7 +23,7 @@ const Login: React.FC = () => {
         <Header as="h2" textAlign="center">
           {'Account Login'}
         </Header>
-        <Form size="large" onSubmit={() => setRecipient(id)}>
+        <Form size="large" onSubmit={handleSubmit}>
           <Segment>
             <Form.Input
               fluid={true}
